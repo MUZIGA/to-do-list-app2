@@ -20,3 +20,19 @@
     }
   </style>
 </head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+
+  <header class="no-print bg-gradient-to-r from-indigo-600 to-indigo-400 text-white p-6">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold">Weekly Planner</h1>
+        <p class="text-sm opacity-90">Plan your week — drag tasks between days, mark done, and save locally.</p>
+      </div>
+      <div class="flex gap-3 items-center">
+        <button id="prevWeek" class="px-3 py-2 rounded bg-indigo-700/90 hover:bg-indigo-800">‹ Prev</button>
+        <div id="weekLabel" class="text-sm font-medium">Week</div>
+        <button id="nextWeek" class="px-3 py-2 rounded bg-indigo-700/90 hover:bg-indigo-800">Next ›</button>
+        <button id="printBtn" class="ml-4 px-3 py-2 rounded bg-white text-indigo-700 border border-white/30 hover:bg-white/90 no-print">Print</button>
+      </div>
+    </div>
+  </header>
