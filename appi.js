@@ -108,3 +108,94 @@
     let metaText = task.priority ? `${capitalize(task.priority)} priority` : "";
     if (task.due) metaText += (metaText ? " · " : "") + `Due ${new Date(task.due).toLocaleDateString()}`;
     node.querySelector(".taskMeta").textContent = metaText;
+    // drag events
+    article.addEventListener("dragstart", ev => {
+      draggedId = task.id;
+      article.classList.add("dragging");
+      ev.dataTransfer.effectAllowed = "move";
+    });
+    article.addEventListener("dragend", () => {
+      draggedId = null;
+      article.classList.remove("dragging");
+    });
+
+    return node;
+  }
+
+  // ===== Drag & Drop =====
+  function handleDragOver(ev) { ev.preventDefault(); ev.dataTransfer.dropEffect = "move"; }
+  function handleDrop(ev) {
+    ev.preventDefault();
+    const dest = this.dataset.container;
+    const idx = tasks.findIndex(t => t.id === draggedId);
+    if (idx !== -1) { tasks[idx].day = dest; save(); render(); }
+  }
+
+  // ===== Actions =====
+  function addTaskFromForm() {
+    const title = titleInput.value.trim();
+    if (!title) return;
+    tasks.push({
+      id: genId(),
+      title,
+      due: dueInput.value || null,
+      priority: priorityInput.value || "medium",
+      day: destinationInput.value || "todo",
+      completed: false
+    });
+    save(); render();
+    titleInput.value = ""; dueInput.value = ""; priorityInput.value = "medium";
+  }
+
+  function toggleComplete(id) {
+    const t = tasks.find(x => x.id === id);
+    if (t) { t.completed = !t.completed; save(); render(); }
+  }
+
+  function openEditPrompt(id) {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+    const newTitle = prompt("Edit title", t.title);
+    if (newTitle !== null) t.title = newTitle.trim() || t.title;
+    const newDue = prompt("Edit due date (YYYY-MM-DD)", t.due || "");
+    if (newDue !== null) t.due = newDue.trim() || null;
+    const newPriority = prompt("Priority (low, medium, high)", t.priority);
+    if (newPriority && ["low","medium","high"].includes(newPriority.toLowerCase())) t.priority = newPriority.toLowerCase();
+    save(); render();
+  }
+
+  function clearCompletedTasks() {
+    if (confirm("Remove all completed tasks?")) {
+      tasks = tasks.filter(t => !t.completed);
+      save(); render();
+    }
+  }
+
+  // ===== Init =====
+  function seedIfEmpty() {
+    if (tasks.length) return;
+    tasks = [
+      { id: genId(), title: "Plan Monday meeting", due: null, priority: "high", day: "mon", completed: false },
+      { id: genId(), title: "Finish module homework", due: null, priority: "medium", day: "wed", completed: false },
+      { id: genId(), title: "Grocery list", due: null, priority: "low", day: "todo", completed: false },
+      { id: genId(), title: "Review PRs", due: null, priority: "high", day: "fri", completed: false },
+    ];
+    save();
+  }
+
+  function init() {
+    destinationInput.innerHTML = '<option value="todo">To-Do</option>' + DAYS.map(d => `<option value="${d}">${DAY_LABELS[d]}</option>`).join("");
+    createDayCols();
+    load(); seedIfEmpty(); render();
+  }
+
+  // Event bindings
+  document.getElementById("addBtn").addEventListener("click", addTaskFromForm);
+  clearCompleted.addEventListener("click", clearCompletedTasks);
+  filter.addEventListener("change", render);
+  document.getElementById("prevWeek").addEventListener("click", () => { currentWeekStart.setDate(currentWeekStart.getDate()-7); createDayCols(); render(); });
+  document.getElementById("nextWeek").addEventListener("click", () => { currentWeekStart.setDate(currentWeekStart.getDate()+7); createDayCols(); render(); });
+  printBtn.addEventListener("click", () => window.print());
+
+  init();
+})();
