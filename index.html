@@ -1,1 +1,22 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weekly Planner — To-Do List</title>
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .task-card { transition: transform .12s ease, box-shadow .12s ease; }
+    .task-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+    .dragging { opacity: .6; transform: scale(.98); }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+      .grid { page-break-after: avoid; }
+    }
+  </style>
+</head>
