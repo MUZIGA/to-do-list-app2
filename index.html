@@ -78,3 +78,27 @@
       Tip: drag tasks between day columns or the To-Do column. Tasks are saved to your browser.
     </section>
   </main>
+  <!-- Template -->
+  <template id="taskTemplate">
+    <article class="task-card bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex items-start justify-between gap-3"
+             draggable="true">
+      <div class="flex items-start gap-3">
+        <button class="completeBtn rounded-full w-7 h-7 flex items-center justify-center border" title="Toggle complete">
+          <svg class="w-4 h-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg>
+        </button>
+        <div>
+          <div class="taskTitle text-sm font-medium"></div>
+          <div class="taskMeta text-xs text-gray-500 mt-1"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="editBtn text-xs px-2 py-1 rounded border">Edit</button>
+        <button class="delBtn text-xs px-2 py-1 rounded border text-red-600">Del</button>
+      </div>
+    </article>
+  </template>
+
+  <!-- JS -->
+  <script src="app.js"></script>
+</body>
+</html
